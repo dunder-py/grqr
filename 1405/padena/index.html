@@ -3,123 +3,84 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple audio player</title>
-  <!-- minimal styling to keep it clean -->
+  <title>Audio · fluid image</title>
   <style>
+    /* minimal reset – only what's needed */
     * {
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
     }
+
     body {
-      background: #f8faff;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #f2f6fc;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      margin: 0;
       padding: 1.5rem;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     }
+
     .player-card {
       background: white;
-      max-width: 480px;
+      max-width: 500px;
       width: 100%;
-      padding: 2rem 1.5rem 2.2rem;
-      border-radius: 2rem;
-      box-shadow: 0 12px 30px rgba(0, 20, 30, 0.12);
+      padding: 1.8rem 1.8rem 2.2rem;
+      border-radius: 2.4rem;
+      box-shadow: 0 12px 32px rgba(0, 20, 30, 0.10);
       text-align: center;
-      transition: box-shadow 0.2s;
-      border: 1px solid rgba(200, 212, 230, 0.3);
+      border: 1px solid rgba(190, 210, 230, 0.2);
     }
-    .player-card:hover {
-      box-shadow: 0 18px 40px rgba(18, 52, 77, 0.10);
+
+    /* ---- fluid image: 100% of container, height auto ---- */
+    .cover-image {
+      display: block;
+      width: 100%;           /* fills container width */
+      height: auto;          /* maintains aspect ratio */
+      max-height: 320px;     /* optional: prevents too tall on wide screens */
+      object-fit: cover;     /* crops nicely if needed, but with height:auto it behaves like contain */
+      border-radius: 1.8rem;
+      margin-bottom: 1.6rem;
+      background: #d9e2ed;   /* soft placeholder while loading */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      /* fluid behaviour: width=100% + height=auto → scales with container */
     }
-    h2 {
-      font-weight: 450;
-      font-size: 1.7rem;
-      letter-spacing: -0.01em;
-      margin-top: 0.2rem;
-      margin-bottom: 0.5rem;
-      color: #0b1e2e;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-    }
-    .sub {
-      color: #2c4a66;
-      font-size: 0.95rem;
-      margin-top: -0.2rem;
-      margin-bottom: 1.8rem;
-      border-bottom: 1px solid #e2ecf5;
-      padding-bottom: 1rem;
-      display: inline-block;
-    }
-    /* audio player styling – clean & native */
+
+    /* audio player – clean, native, no extra labels */
     audio {
       width: 100%;
-      margin: 0.8rem 0 1rem;
+      display: block;
       border-radius: 60px;
-      background: #f0f5fe;
-      padding: 0.2rem 0.2rem;
+      background: #f0f6fe;
+      padding: 0.1rem 0.1rem;
       box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+      margin: 0;
     }
-    /* fallback / info */
-    .info-note {
-      font-size: 0.9rem;
-      color: #2e4b68;
-      background: #eef5fc;
-      padding: 0.7rem 1rem;
-      border-radius: 60px;
-      display: inline-block;
-      margin-top: 0.6rem;
-      border: 1px solid #d4e2f0;
-      backdrop-filter: blur(2px);
-    }
-    .info-note code {
-      background: #d5e2f2;
-      padding: 0.1rem 0.7rem;
-      border-radius: 30px;
-      font-size: 0.85rem;
-      color: #002b4a;
-    }
-    .footer {
-      margin-top: 1.8rem;
-      font-size: 0.8rem;
-      color: #5b6f82;
-      border-top: 1px dashed #cbdae7;
-      padding-top: 1.2rem;
-    }
-    /* tiny accessibility */
-    @media (max-width: 400px) {
-      .player-card { padding: 1.5rem 1rem; }
-    }
+
+    /* absolutely no extra items — no headings, no info, no footer */
   </style>
 </head>
 <body>
   <div class="player-card">
-    <h2>
-      <img src="img1.jpeg" />
-      <span>🎵</span> Audio<span style="font-weight:300;">Player</span>
-    </h2>
-    <div class="sub">simple · native · ready</div>
+    <!-- 
+      fluid image: width="100%" height="auto" 
+      container is .player-card → image fills it, scales with viewport 
+    -->
+    <img 
+      class="cover-image" 
+      src="img1.jpeg" 
+      alt="audio cover"
+      loading="lazy"
+    >
 
-    <!-- ===== AUDIO PLAYER TAG ===== -->
+    <!-- audio player – only the tag, no extra text -->
     <audio controls preload="metadata">
-      <!-- 
-        replace the src with your own audio file.
-        the sample is a short instrumental from the public domain.
-      -->
       <source src="test.mp3" type="audio/mpeg">
-      <!-- fallback for unsupported browsers -->
       Your browser does not support the audio element.
     </audio>
 
-    <div class="info-note">
-      ⏵ <code>controls</code> · <code>preload</code>
-    </div>
-    <div class="footer">
-      <span>⏹️ replace <strong>src</strong> with your own file</span>
-    </div>
+    <!-- no extra items: no headings, no labels, no footer -->
   </div>
 </body>
 </html>
