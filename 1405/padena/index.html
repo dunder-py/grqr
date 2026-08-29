@@ -114,12 +114,16 @@
       backdrop-filter: blur(4px);
     }
 
-    /* absolutely no extra text, headings, or labels */
   </style>
 </head>
 <body>
   <div class="player-card">
-    <!-- fluid image on top -->
+
+    <audio controls preload="metadata">
+      <source src="test.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+
     <img
       class="cover-image"
       src="img1.jpeg"
@@ -127,13 +131,6 @@
       loading="lazy"
     />
 
-    <!-- audio player – only the tag -->
-    <audio controls preload="metadata">
-      <source src="test.mp3" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
-
-    <!-- no extra items: no headings, no labels, no footer -->
   </div>
 </body>
 </html>
