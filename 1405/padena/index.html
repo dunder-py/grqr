@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Audio · fluid image</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Audio · blurred background</title>
   <style>
-    /* minimal reset – only what's needed */
+    /* reset & base */
     * {
       margin: 0;
       padding: 0;
@@ -13,70 +13,123 @@
     }
 
     body {
-      background: #f2f6fc;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 1.5rem;
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      /* subtle page background so the blurred card pops */
+      background: #e8edf4;
     }
 
+    /* ---- player-card with blurred background image ---- */
     .player-card {
-      background: white;
+      position: relative;
       max-width: 500px;
       width: 100%;
       padding: 1.8rem 1.8rem 2.2rem;
       border-radius: 2.4rem;
-      box-shadow: 0 12px 32px rgba(0, 20, 30, 0.10);
       text-align: center;
-      border: 1px solid rgba(190, 210, 230, 0.2);
+      overflow: hidden; /* keeps the blurred bg inside the rounded corners */
+      isolation: isolate; /* creates a stacking context */
+
+      /* shadow & border on top of the blurred layer */
+      box-shadow: 0 16px 40px rgba(0, 20, 30, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+
+      /* ---- background image with blur (applied to the pseudo-element) ---- */
+      /* we use a pseudo-element so the content stays sharp and readable */
     }
 
-    /* ---- fluid image: 100% of container, height auto ---- */
+    /* pseudo-element for the blurred background */
+    .player-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1; /* behind the content */
+
+      /* background image – replace with your own */
+      background-image: url('img1.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      /* the blur effect */
+      filter: blur(12px) brightness(0.75);
+      transform: scale(1.05); /* avoids edge artifacts from blur */
+      border-radius: inherit; /* matches parent rounding */
+    }
+
+    /* fallback dark overlay (optional) – helps text/controls stand out */
+    .player-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: rgba(10, 20, 30, 0.25); /* subtle dark overlay for contrast */
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    /* ensure content sits above the pseudo-elements */
+    .cover-image,
+    audio {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ---- fluid image on top ---- */
     .cover-image {
       display: block;
-      width: 100%;           /* fills container width */
-      height: auto;          /* maintains aspect ratio */
-      max-height: 320px;     /* optional: prevents too tall on wide screens */
-      object-fit: cover;     /* crops nicely if needed, but with height:auto it behaves like contain */
+      width: 100%;
+      height: auto;
+      max-height: 320px;
+      object-fit: cover;
       border-radius: 1.8rem;
       margin-bottom: 1.6rem;
-      background: #d9e2ed;   /* soft placeholder while loading */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-      /* fluid behaviour: width=100% + height=auto → scales with container */
+      background: #d9e2ed;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      /* subtle border to separate from blurred bg */
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    /* audio player – clean, native, no extra labels */
+    /* ---- audio player – clean, native ---- */
     audio {
       width: 100%;
       display: block;
       border-radius: 60px;
-      background: #f0f6fe;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px); /* slight glass effect on player */
       padding: 0.1rem 0.1rem;
-      box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
       margin: 0;
+      /* ensure controls are readable */
+      color-scheme: dark; /* makes controls lighter on dark bg */
     }
 
-    /* absolutely no extra items — no headings, no info, no footer */
+    /* fallback for older browsers: audio controls background */
+    audio::-webkit-media-controls-panel {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(4px);
+    }
+
+    /* absolutely no extra text, headings, or labels */
   </style>
 </head>
 <body>
   <div class="player-card">
-    <!-- 
-      fluid image: width="100%" height="auto" 
-      container is .player-card → image fills it, scales with viewport 
-    -->
-    <img 
-      class="cover-image" 
-      src="img1.jpeg" 
+    <!-- fluid image on top -->
+    <img
+      class="cover-image"
+      src="img1.jpeg"
       alt="audio cover"
       loading="lazy"
-    >
+    />
 
-    <!-- audio player – only the tag, no extra text -->
+    <!-- audio player – only the tag -->
     <audio controls preload="metadata">
-      <source src="test.mp3" type="audio/mpeg">
+      <source src="test.mp3" type="audio/mpeg" />
       Your browser does not support the audio element.
     </audio>
 
